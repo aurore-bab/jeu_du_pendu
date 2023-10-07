@@ -6,8 +6,10 @@
 # interface graphique
 #========================================================================================
 # à améliorer / régler:
-# fonction affiche
 # fonction image_pendu
+# arreter le programme quand on a perdu ou quand on a gagné
+
+
 import random as rd
 from tkinter import Tk, Frame, Label, Button, StringVar, Entry, Canvas, PhotoImage
 import tkinter.font as font
@@ -26,65 +28,45 @@ def mot_a_deviner(fich):
     mot_choisi = rd.randint(0, len(liste_mots) - 1)
     return liste_mots[mot_choisi]
 
-def affiche(lettres_proposees):
+def affiche():
     #texte.get()
     global mot
+    global lettres_proposees
+    global texte
+    global texte2
 
     affichage = ""
-    for lettre in range(len(mot)): #pour automatiquement montrer la première lettre
+    for lettre in range(len(mot)):
         if mot[lettre] in lettres_proposees :
             affichage += mot[lettre].upper() + " "
         else:
             affichage += "_ "
-    return affichage
-    #texte.set(affichage)
+    
+    affichage2 = "lettres déjà proposées : \n"
+    for lettre in lettres_proposees:
+        affichage2 += lettre.upper() + " "
 
-def image_pendu():
-    image_actuelle.get()
-    #global nb_chances
-    nb_chances = 8
-
-    if nb_chances == 8:
-        image_actuelle.set("pendu_n8")
-    elif nb_chances == 7:
-        image_actuelle.set("pendu_n7")
-    elif nb_chances == 6:
-        image_actuelle.set("pendu_n6")
-    elif nb_chances == 5:
-        image_actuelle.set("pendu_n5")
-    elif nb_chances == 4:
-        image_actuelle.set("pendu_n4")
-    elif nb_chances == 3:
-        image_actuelle.set("pendu_n3")
-    elif nb_chances == 2:
-        image_actuelle.set("pendu_n2")
-    elif nb_chances == 1:
-        image_actuelle.set("pendu_n1")
-    elif nb_chances == 0:
-        image_actuelle.set("pendu_n0")
-        """il faudrait ici faire un truc qui fait apparaitre par desus tout 
-        une nouvelle fenêtre qui dit "GAME OVER le mot était : {}".format(le mot actuel)
-        avec un bouton "quitter" et un bouton "rejouer"
-        """
+    texte.set(affichage)
+    texte2.set(affichage2)
 
 def verif_lettres() :
     global nb_chances
-    global lettre_choisie
     global lettres_proposees
     global mot
 
-    print(lettres_proposees)
-    print(lettre_choisie)
-    print(str(lettre_choisie))
-    print(nb_chances)
+    alphabet = ["a" , "b" , "c" , "d" , "e" ,"f" , "g" , "h" , "i" , "j" ,"k" ,
+            "l" , "m" , "n" , "o" , "p" , "q" , "r" , "s" , "t" , "u" , "v" ,
+            "w" , "x" , "y" , "z"]
+    
+    if lettre_choisie.get() not in lettres_proposees and len(lettre_choisie.get()) == 1 and lettre_choisie.get() in alphabet:
+        lettres_proposees.append(lettre_choisie.get())
 
-    if str(lettre_choisie) not in lettres_proposees and len(str(lettre_choisie)) == 1:
-        lettres_proposees.append(str(lettre_choisie))
-
-    if str(lettre_choisie) not in mot:
+    if lettre_choisie.get() not in mot and len(lettre_choisie.get()) <= 1 and lettre_choisie.get() in alphabet:
         nb_chances = nb_chances - 1
-        
+    
+    
     lettre_choisie.set('')
+    affiche()
          
 def test_mot(word, lettres_prop):
     """ce que fait la fonction: elle teste si on a trouvé toutes les lettres du mot ou pas
@@ -96,6 +78,35 @@ def test_mot(word, lettres_prop):
             return False
     return True
 
+def image_pendu():
+    global image_actuelle
+    global nb_chances
+    
+    print(image_actuelle)
+    print(nb_chances)
+
+    if nb_chances == 8:
+        image_actuelle = "pendu_n8.gif"
+    elif nb_chances == 7:
+        image_actuelle = "pendu_n7.gif"
+    elif nb_chances == 6:
+        image_actuelle = "pendu_n6.gif"
+    elif nb_chances == 5:
+        image_actuelle = "pendu_n5.gif"
+    elif nb_chances == 4:
+        image_actuelle = "pendu_n4.gif"
+    elif nb_chances == 3:
+        image_actuelle = "pendu_n3.gif"
+    elif nb_chances == 2:
+        image_actuelle = "pendu_n2.gif"
+    elif nb_chances == 1:
+        image_actuelle = "pendu_n1.gif"
+    elif nb_chances == 0:
+        image_actuelle = "pendu_n0.gif"
+        """il faudrait ici faire un truc qui fait apparaitre par desus tout 
+        une nouvelle fenêtre qui dit "GAME OVER le mot était : {}".format(le mot actuel)
+        avec un bouton "quitter" et un bouton "rejouer"
+        """
 
 
 #initialisation de toutes les variables
@@ -120,24 +131,6 @@ frame1.pack(side = 'right', padx = 10, pady = 10)
 #image_actuelle.set(
 #image_pendu() 
 image_actuelle = "pendu.gif"
-if nb_chances == 8:
-    image_actuelle = "pendu_n8.gif"
-elif nb_chances == 7:
-    image_actuelle = "pendu_n7.gif"
-elif nb_chances == 6:
-    image_actuelle = "pendu_n6.gif"
-elif nb_chances == 5:
-    image_actuelle = "pendu_n5.gif"
-elif nb_chances == 4:
-    image_actuelle = "pendu_n4.gif"
-elif nb_chances == 3:
-    image_actuelle = "pendu_n3.gif"
-elif nb_chances == 2:
-    image_actuelle = "pendu_n2.gif"
-elif nb_chances == 1:
-    image_actuelle = "pendu_n1.gif"
-elif nb_chances == 0:
-    image_actuelle = "pendu_n0.gif"
 
 pendu = PhotoImage(file = image_actuelle)
 canvas = Label(frame1, image = pendu)
@@ -154,25 +147,17 @@ butt_quit.pack(side ='top', padx = 10, pady = 10)
 
 #3 zone de texte qui affiche le mot à trous
 texte = StringVar()
-affichage = ""
-for lettre in range(len(mot)): #pour automatiquement montrer la première lettre
-    if mot[lettre] in lettres_proposees :
-        affichage += mot[lettre].upper() + " "
-    else:
-        affichage += "_ "
-texte = affichage
-mot_a_deviner = Label(mw, text = texte)
+mot_a_deviner = Label(mw, textvariable = texte)
 mot_a_deviner['font'] = f
 mot_a_deviner.pack(side = 'top', padx = 10, pady = 10)
 
 #3 bis = lettres déjà proposées
-texte2 = "lettres déjà proposées : "
-for lettre in lettres_proposees:
-    texte2 += lettre.upper() + " "
-mot_a_deviner = Label(mw, text = texte2)
-mot_a_deviner['font'] = f
-mot_a_deviner.pack(side = 'top', padx = 10, pady = 10)
+texte2 = StringVar()
+l_prop = Label(mw, textvariable = texte2, height = 2)
+l_prop['font'] = f
+l_prop.pack(side = 'top', padx = 10, pady = 10)
 
+affiche()
 
 #4 boite entry
 lettre_choisie = StringVar()
@@ -191,8 +176,9 @@ label_champ.pack (side = 'left', padx = 10, pady = 10)
 alphabet = ["a" , "b" , "c" , "d" , "e" ,"f" , "g" , "h" , "i" , "j" ,"k" ,
             "l" , "m" , "n" , "o" , "p" , "q" , "r" , "s" , "t" , "u" , "v" ,
             "w" , "x" , "y" , "z"]
-test = False #cette variable sert à valider si on a trouvé tout le mot ou pas
+
 """
+test = False #cette variable sert à valider si on a trouvé tout le mot ou pas
 # pgme principal
 while not test:
     # on demande une lettre au joueur
@@ -207,8 +193,6 @@ if nb_chances == 0:
     texte.set("BRAVO! vous avez gagné! le mot était bien: {}".format(mot))
 
 """
-
-
 
 
 mw.mainloop()
