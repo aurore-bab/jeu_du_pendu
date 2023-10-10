@@ -18,29 +18,26 @@ while rejouer == "oui":
 print("merci d'avoir joué au pendu")"""
 import random as rd
 from tkinter import Tk, Frame, Label, Button, StringVar, Entry, Canvas, PhotoImage
+from tkinter import messagebox as mg
 
-"""
 mw = Tk() 
 mw.title('le jeu du pendu')
 mw["bg"] = "navajo white"
 mw.geometry('500x300+100+100')
 mw.config(cursor = "heart")
 
+p=int(input("rentrez 2 "))
+if p==2:
+    mg.showinfo("en fait tchau!")
+    mw.destroy()
+else:
+    mg.showarning("et bah il se passe rien hein")
 
-pendu = PhotoImage(file = "pendu.gif")
+"""pendu = PhotoImage(file = "pendu.gif")
 canvas = Canvas (mw, width = 200, height = 200)
-item = canvas.create_image(0, 0, anchor = 'e', image = pendu)
-canvas.pack(side = 'right')
-
-mw.mainloop()"""
-
-import tkinter as tk
- 
-fenetre = tk.Tk()
- 
-photo = tk.PhotoImage(file='pendu.gif')
- 
-label = tk.Label(fenetre, image=photo)
-label.pack()
- 
-fenetre.mainloop()
+canvas.delete()
+canvas.create_image(0,0, anchor = 'nw', image = pendu)
+canvas.config(height = pendu.height(), width = pendu.width())
+canvas.pack(side='right', padx = 10, pady = 10)
+"""
+mw.mainloop()
