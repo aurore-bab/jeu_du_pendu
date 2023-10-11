@@ -92,7 +92,13 @@ def game_over():
 
         #réinitialisation de toutes les variables et de l'image
         nb_chances = 8
-        mot = mot_a_deviner("mots.txt")
+        f = open("mots.txt", 'r')
+        l = f.read()
+        f.close()
+        liste_mots = l.split(", ")
+        mot_choisi = rd.randint(0, len(liste_mots) - 1)
+        mot = liste_mots[mot_choisi]
+
         lettres_proposees =  [mot[0]]
         affiche()
         image_pendu()
@@ -102,13 +108,29 @@ def gagne():
     global nb_chances
     global lettres_proposees
 
-    MsgBox = msg.askretrycancel('gégné',"GAGNE!!\nBravo ! vous avez gagné perdu, le mot était bien: {}".format(mot),icon = 'info')
+    MsgBox = msg.askretrycancel('gagné',"GAGNE!!\nBravo ! vous avez gagné, le mot était bien: {}".format(mot),icon = 'info')
     if not MsgBox:
         mw.destroy()
     else:
         #réinitialisation de toutes les variables et de l'image
         nb_chances = 8
-        mot = mot_a_deviner("mots.txt")
+        #mot = mot_a_deviner("mots.txt") 
+        # cette fonction ne veut pas être appelée dans d'autres fonctions, mais sinon le reste marche
+        #donc pour y pallier, je sais que c'est moche, mais j'ai copié la fonction mot_a_deviner
+        
+        #on ouvre le fichier texte avec la liste de mots
+        f = open("mots.txt", 'r')
+        l = f.read()
+        f.close()
+        #on en extrait les mots
+        liste_mots = l.split(", ")
+        # on en choisit un au hasard
+        mot_choisi = rd.randint(0, len(liste_mots) - 1)
+        mot = liste_mots[mot_choisi]
+        
+        
+        #là ça réinitialise mais avec le même mot...
+
         lettres_proposees =  [mot[0]]
         affiche()
         image_pendu()
@@ -182,6 +204,7 @@ pendu_5 = PhotoImage(file = "pendu_n5.gif")
 pendu_6 = PhotoImage(file = "pendu_n6.gif")
 pendu_7 = PhotoImage(file = "pendu_n7.gif")
 pendu_8 = PhotoImage(file = "pendu_n8.gif")
+
 
 #canvas.delete(all)
 canvas.create_image(0,0, anchor = 'nw', image = pendu)
