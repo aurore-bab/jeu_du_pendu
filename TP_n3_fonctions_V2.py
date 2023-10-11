@@ -5,8 +5,9 @@
 # objectifs:
 # interface graphique
 #========================================================================================
-# fini !! il reste plus qu'à le faire essayer
-# et à mettre des commentaires
+# fini !! 
+# à améliorer :
+# associer la touche entrée à la fontcion verif_lettres
 
 import random as rd
 from tkinter import Tk, Frame, Label, Button, StringVar, Entry, Canvas, PhotoImage
@@ -56,7 +57,6 @@ def image_pendu():
     et change l'image affichée en fonction du nombre de chances"""
     global image_actuelle
     global nb_chances
-    global frame1
     global canvas
 
     if nb_chances == 8:
@@ -136,6 +136,9 @@ def verif_lettres() :
             "w" , "x" , "y" , "z"]
     
     #vérification de la chaine d'entrée
+    if lettre_choisie.get() == mot:
+        fin_du_jeu('gagné !!',"GAGNE!!\nBravo ! vous avez gagné, le mot était bien: {}".format(mot),'info')
+
     if lettre_choisie.get() in alphabet and len(lettre_choisie.get()) == 1 and lettre_choisie.get() not in lettres_proposees:
         #on l'ajoute aux lettres proposées
         lettres_proposees.append(lettre_choisie.get())
@@ -227,4 +230,3 @@ label_champ.pack (side = 'left', padx = 10, pady = 10)
 #mw.bind('<Return>', verif_lettres)
 
 mw.mainloop()
-
